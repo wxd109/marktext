@@ -19,6 +19,7 @@
     <el-select
       v-model="selectValue"
       :disabled="disable"
+      :teleported="false"
       @change="select"
     >
       <el-option
