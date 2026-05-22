@@ -1,5 +1,4 @@
 // List of all static commands that are loaded into command center.
-import { getCurrentWindow } from '@electron/remote'
 import bus from '../bus'
 import { delay, isOsx } from '@/util'
 import { isUpdatable } from './utils'
@@ -426,7 +425,7 @@ const commands = [
   {
     id: 'window.minimize',
     execute: async() => {
-      getCurrentWindow().minimize()
+      window.electron.windowControl.minimize()
     }
   },
   {
@@ -438,8 +437,7 @@ const commands = [
   {
     id: 'window.toggle-full-screen',
     execute: async() => {
-      const win = getCurrentWindow()
-      win.setFullScreen(!win.isFullScreen())
+      window.electron.windowControl.toggleFullScreen()
     }
   },
 
@@ -627,7 +625,7 @@ const commands = [
     id: 'docs.user-guide',
     execute: async() => {
       window.electron.shell.openExternal(
-        'https://github.com/marktext/marktext/blob/trunk/docs/BASICS.md'
+        'https://github.com/marktext/marktext/blob/develop/docs/end-user/BASICS.md'
       )
     }
   },
@@ -635,7 +633,7 @@ const commands = [
     id: 'docs.markdown-syntax',
     execute: async() => {
       window.electron.shell.openExternal(
-        'https://github.com/marktext/marktext/blob/trunk/docs/MARKDOWN_SYNTAX.md'
+        'https://github.com/marktext/marktext/blob/develop/docs/end-user/MARKDOWN_SYNTAX.md'
       )
     }
   },
@@ -663,6 +661,7 @@ const commands = [
 if (isUpdatable()) {
   commands.push({
     id: 'file.check-update',
+    description: getCommandDescriptionById('file.check-update'),
     execute: async() => {
       window.electron.ipcRenderer.send('mt::check-for-update')
     }
